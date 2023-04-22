@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин</title>
+</head>
+<body>
+
+<div th:if="${#authorization.expression('isAuthenticated()')}">
+
+    <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+        <form method="get" th:action="@{/cart}">
+            <button type="submit">Корзина</button>
+        </form>
+        <form method="get" th:action="@{/order}">
+            <input type="submit" value="Заказы">
+        </form>
+    </div>
+
+    <form method="post" th:action="@{/logout}">
+        <button type="submit">Выход</button>
+    </form>
+</div>
+
+<div th:unless="${#authorization.expression('isAuthenticated()')}">
+    <form method="get" th:action="@{/authentication}">
+        <input type="submit" value="Войти">
+    </form>
+</div>
+
+<h1>Главная страница магазина</h1>
+<div>
+    <h3>Отбор</h3>
+    <form th:method="POST" th:action="@{/product/search}">
+        <fieldset>
+            <legend>Выберите параметры для сортировки, поиска, фильтрации:</legend>
+            <div>
+                <label for="search">Поиск по наименованию</label>
+                <input type="text" id="search" name="search" th:value="*{value_search}">
+            </div>
+            <br>
+            <div>
+                <span>Цена, P</span>
+                <div>
+                    <label for="ot">От</label>
+                    <input type="text" name="ot" id="ot" th:value="*{value_price_ot}">
+                    <label for="do">До</label>
+                    <input type="text" name="do" id="do" th:value="*{value_price_do}">
+                </div>
+                <br>
+                <div>
+                    <input type="radio" id="ascending_price" name="price" value="sorted_by_ascending_price">
+                    <label for="ascending_price">Отсортировать по возрастанию цены</label>
+                    <input type="radio" id="descending_price" name="price" value="sorted_by_descending_price">
+                    <label for="descending_price">Отсортировать по убыванию цены</label>
+                </div>
+            </div>
+            <br>
+            <div>
+                <label for="category">Категория товаров:</label>
+                <select name="category" id="category">
+                    <option value="">Все</option>
+                    <div th:each="element : ${categorys}">
+                        <option th:text="${element.getName()}"
+                                th:value="${element.getId()}"
+                                th:selected="(${value_category} == ${element.getId()})"
+                        >
+                    </div>
+                </select>
+            </div>
+            <br>
+            <div>
+                <input type="submit" value="Отобрать">
+            </div>
+        </fieldset>
+    </form>
+</div>
+<hr>
+<div th:if="${search_product}">
+<!--    <h3>Результат отбора</h3>-->
+    <div th:each="product : ${search_product}">
+        <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+        <br>
+        <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+        <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+
+        <div th:if="(${#authorization.expression('isAuthenticated()')})">
+            <a th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+        </div>
+        <hr>
+    </div>
+</div>
+<div th:unless="${search_product}">
+<!--    <h3>Доступные товары: </h3>-->
+    <div th:each="product : ${products}">
+        <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+        <br>
+        <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+        <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+
+        <div th:if="(${#authorization.expression('isAuthenticated()')})">
+            <a th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>
