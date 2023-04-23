@@ -1,6 +1,6 @@
 .*
 target/
-main/test/
+/src/test/
 # Compiled class file
 *.class
 
