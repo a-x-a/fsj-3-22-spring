@@ -37,35 +37,41 @@ public class ProductController {
 
     @PostMapping("/search")
     public String productSearch(@RequestParam("search") String search, @RequestParam("ot") String ot, @RequestParam("do") String Do, @RequestParam(value = "price", required = false, defaultValue = "") String price, @RequestParam(value = "category", required = false, defaultValue = "") String category, Model model){
-        model.addAttribute("products", productService.getAllProduct());
         if(!ot.isEmpty() & !Do.isEmpty()){
             if(!price.isEmpty()){
                 if(price.equals("sorted_by_ascending_price")) {
                     if (!category.isEmpty()) {
-                        model.addAttribute("search_product", productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), Integer.parseInt(category)));
+                        model.addAttribute("products", productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), Integer.parseInt(category)));
                     } else {
-                        model.addAttribute("search_product", productRepository.findByTitleOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do)));
+                        model.addAttribute("products", productRepository.findByTitleOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do)));
                     }
                 } else if(price.equals("sorted_by_descending_price")){
                     if(!category.isEmpty()){
-                        model.addAttribute("search_product", productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), Integer.parseInt(category)));
+                        model.addAttribute("products", productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), Integer.parseInt(category)));
                     }  else {
-                        model.addAttribute("search_product", productRepository.findByTitleOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do)));
+                        model.addAttribute("products", productRepository.findByTitleOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do)));
                     }
                 }
             } else {
                 if (!category.isEmpty()) {
-                    model.addAttribute("search_product", productRepository.findByTitleAndCategoryAndPriceGreaterThanEqualAndPriceLessThanEqual(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), Integer.parseInt(category)));
+                    model.addAttribute("products", productRepository.findByTitleAndCategoryAndPriceGreaterThanEqualAndPriceLessThanEqual(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), Integer.parseInt(category)));
                 }else {
-                    model.addAttribute("search_product", productRepository.findByTitleAndPriceGreaterThanEqualAndPriceLessThanEqual(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do)));
+                    model.addAttribute("products", productRepository.findByTitleAndPriceGreaterThanEqualAndPriceLessThanEqual(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do)));
                 }
             }
         } else {
             if (!category.isEmpty()) {
-                model.addAttribute("search_product", productRepository.findByTitleAndCategory(search.toLowerCase(), Integer.parseInt(category)));
-            }else {
-                model.addAttribute("search_product", productRepository.findByTitleContainingIgnoreCase(search));
+                model.addAttribute("products", productRepository.findByTitleAndCategory(search.toLowerCase(), Integer.parseInt(category)));
+            }else if (!search.isEmpty()){
+                model.addAttribute("products", productRepository.findByTitleContainingIgnoreCase(search));
             }
+        }
+
+        if (model.containsAttribute("products")){
+            model.addAttribute("filter", true);
+        }else {
+            model.addAttribute("products", productService.getAllProduct());
+            model.addAttribute("filter", false);
         }
 
         model.addAttribute("value_search", search);

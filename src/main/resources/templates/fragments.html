@@ -13,14 +13,10 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
 </head>
 <!--NAV-->
 <div th:fragment="nav" class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Магазин</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -65,20 +61,101 @@
             </a>
         </div>
         <div th:if="(${#authorization.expression('isAuthenticated()')})" class="card-footer">
-            <a class="btn btn-primary" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
+            <a class="btn btn-outline-primary" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
                th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
         </div>
     </div>
 </div>
-<!--FOOTER-->
-<div th:fragment="footer" class="container">
-    <footer th:fragment="footer"
-            class="d-flex flex-row flex-wrap justify-content-around row-col-cols-1 row-cols-sm-2 row-cols-md-5 py-3 my-5 border-top">
-        <div>
-            &copy; 2023
+<!--FILTER-->
+<div th:fragment="filter" class="container">
+    <a class="btn btn-outline-primary mb-3" data-bs-toggle="collapse" href="#collapseSearch" role="button"
+       th:aria-expanded="${{filter}}"
+       aria-controls="collapseSearch">Отбор</a>
+    <div class="collapse mb-5" id="collapseSearch">
+        <div class="form-group">
+            <form th:method="POST" th:action="@{/product/search}">
+                <fieldset>
+                    <legend>Выберите параметры для сортировки, поиска, фильтрации:</legend>
+                    <div class="form-group mb-4">
+                        <label for="search" class="form-label">Поиск по наименованию</label>
+                        <input class="form-control" type="text" id="search" name="search"
+                               placeholder="Введите текст для поиска"
+                               th:value="*{value_search}">
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <span class="form-label mb-2">Цена, P</span>
+                        <div class="row g-3  mb-2">
+                            <div class="col-auto">
+                                <div class="input-group">
+                                    <label for="ot" class="input-group-text">От</label>
+                                    <input class="form-control" type="text" name="ot" id="ot"
+                                           th:value="*{value_price_ot}">
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="input-group">
+                                    <label for="do" class="input-group-text">До</label>
+                                    <input class="form-control" type="text" name="do" id="do"
+                                           th:value="*{value_price_do}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-auto">
+                                <div class="form-check">
+                                    <label for="ascending_price" class="form-check-label">Отсортировать по возрастанию
+                                        цены</label>
+                                    <input class="form-check-input" type="radio" id="ascending_price" name="price"
+                                           value="sorted_by_ascending_price">
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="form-check">
+                                    <label for="descending_price" class="form-check-label">Отсортировать по убыванию
+                                        цены</label>
+                                    <input class="form-check-input" type="radio" id="descending_price" name="price"
+                                           value="sorted_by_descending_price">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <div class="input-group">
+                            <label for="category" class="input-group-text">Категория товаров:</label>
+                            <select class="form-select" name="category" id="category">
+                                <option value="">Все</option>
+                                <div th:each="element : ${categorys}">
+                                    <option th:text="${element.getName()}"
+                                            th:value="${element.getId()}"
+                                            th:selected="(${value_category} == ${element.getId()})"
+                                    >
+                                </div>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <button type="submit" class="btn btn-outline-primary">Показать</button>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-    </footer>
+    </div>
 </div>
+<!--FOOTER-->
+<footer th:fragment="footer"
+        class="d-flex flex-row flex-wrap justify-content-around row-col-cols-1 row-cols-sm-2 row-cols-md-5 py-3 my-5 border-top">
+    <div>
+        &copy; 2023
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous">
+    </script>
+</footer>
+
 </body>
 
 </html>
