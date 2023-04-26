@@ -16,5 +16,8 @@
     <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
     <p th:text="'Cтатус: ' + ${order.getStatus()}">
 </div>
+<footer th:replace="fragments :: footer">
+    <div>FOOTER</div>
+</footer>
 </body>
 </html>

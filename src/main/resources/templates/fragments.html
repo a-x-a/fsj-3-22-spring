@@ -18,8 +18,9 @@
 <div th:fragment="nav" class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img th:src="@{/image/home.png}" alt="" width="30" >
+<!--            "(${value_search.isEmpty()})?'collapse':'collapse show'"-->
+            <a class="navbar-brand" th:href="(${#authorization.expression('hasRole(''ROLE_ADMIN'')')})?'/admin':'/'">
+                <img th:src="@{/image/home.png}" alt="" width="30">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -99,7 +100,11 @@
 </div>
 <!--FILTER-->
 <div th:fragment="filter" class="container">
-    <div class="mb-5">
+    <button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter"
+            aria-expanded="false" aria-controls="collapseFilter">
+        Отбор
+    </button>
+    <div class="mb-5 collapse" id="collapseFilter">
         <div class="form-group">
             <form th:method="POST" th:action="@{/product/search}">
                 <fieldset>
