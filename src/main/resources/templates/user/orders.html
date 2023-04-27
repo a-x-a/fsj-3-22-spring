@@ -1,21 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head th:replace="fragments :: head">
     <meta charset="UTF-8">
     <title>Заказы</title>
 </head>
-<body>
-<a href="/product">К списку товаров</a>
+<body class="container">
+<div th:include="fragments :: nav"></div>
 <h3>Заказы</h3>
-<div th:each="order : ${orders}">
-    <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
-    <img th:src="'/img/' + ${order.getProduct().getImageList()[0].getFileName()}" width="300px">
-    <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}">
-    <p th:text="'Количество: ' + ${order.getCount()}">
-    <p th:text="'Цена: ' + ${order.getPrice()}">
-    <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
-    <p th:text="'Cтатус: ' + ${order.getStatus()}">
+<div class="collapse show" id="collapseOrder">
+    <table class="table table-bordered border-primary caption-top">
+        <caption>Список заказов</caption>
+        <thead class="table-light border-primary">
+        <tr>
+            <th></th>
+            <th>#</th>
+            <th>Дата</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Статус</th>
+        </tr>
+        </thead>
+<!--        <tfoot>-->
+<!--        <tr>-->
+<!--            <td colspan="6">-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tfoot>-->
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td>
+                <img th:src="'/img/' + ${order.getProduct().imageList[0].getFileName()}"  style="max-height: 80px;"
+                     th:alt="${order.getProduct().getTitle()}"
+            ></td>
+            <td th:text="${order.getNumber()}"></td>
+            <td th:text="${order.getDateTime()}"></td>
+            <td th:text="${order.getProduct().getTitle()}"></td>
+            <td th:text="${order.getPrice()}"></td>
+            <td th:text="${order.getStatus()}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
+
 <footer th:replace="fragments :: footer">
     <div>FOOTER</div>
 </footer>

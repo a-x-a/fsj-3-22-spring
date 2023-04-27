@@ -34,6 +34,10 @@
                 <p><b>Cклад:</b> <span th:text="${product.getWarehouse()}"></span></p>
                 <p><b>Цена:</b> <span th:text="${product.getPrice()}"></span></p>
             </div>
+            <div th:if="(${#authorization.expression('isAuthenticated()')})" class="card-footer bg-transparent border-0">
+                <a class="btn btn-outline-primary" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
+                   th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+            </div>
         </div>
     </div>
     <p class="m-3" th:text="'Описание: ' + ${product.getDescription()}"></p>

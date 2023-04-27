@@ -8,18 +8,17 @@
 <div th:include="fragments :: nav"></div>
 <h1 th:text="'Личный кабинет администратора ' + ${#authentication.principal.getPerson().getLogin()}"></h1>
 <!--PRODUCT-->
-<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProduct"
-        aria-expanded="false" aria-controls="collapseProduct">
-    Товары
-</button>
-<div class="collapse" id="collapseProduct">
+<!--<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProduct"-->
+<!--        aria-expanded="false" aria-controls="collapseProduct">-->
+<!--    Товары-->
+<!--</button>-->
+<div class="collapse show" id="collapseProduct">
 <table class="table table-bordered border-primary caption-top">
     <caption>Список товаров</caption>
     <thead class="table-light border-primary">
     <tr>
         <th></th>
         <th>Наименование</th>
-<!--        <th>Описание</th>-->
         <th>Цена</th>
         <th colspan="2">Действия</th>
     </tr>
@@ -37,7 +36,6 @@
                  th:alt="${product.getTitle()}"
         ></td>
         <td th:text="${product.getTitle()}"></td>
-<!--        <td th:text="${product.getDescription()}"></td>-->
         <td th:text="${product.getPrice()}"></td>
         <td><a class="btn btn-outline-primary" th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">Редактировать</a></td>
         <td><a class="btn btn-outline-primary" th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удалить</a></td>
@@ -46,12 +44,12 @@
 </table>
 </div>
 <!--ORDER-->
-<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrder"
-        aria-expanded="false" aria-controls="collapseOrder">
-    Заказы
-</button>
-<!--<div th:class="(${value_search})? '':(${value_search.isEmpty()})?'collapse':'collapse show'" id="collapseOrder">-->
-<div class="collapse" id="collapseOrder">
+<!--<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrder"-->
+<!--        aria-expanded="false" aria-controls="collapseOrder">-->
+<!--    Заказы-->
+<!--</button>-->
+<!--<div th:class="'collapse ' + (${value_search}? (${!value_search.isEmpty()}? 'show'))" id="collapseOrder">-->
+<div class="collapse show" id="collapseOrder">
 <table class="table table-bordered border-primary caption-top">
     <caption>Список заказов</caption>
     <thead class="table-light border-primary">
@@ -69,21 +67,14 @@
         <td colspan="6">
             <form th:method="GET" th:action="@{/admin/order/search}">
             <div class="form-group row mb-2">
-                <label for="search" class="col-sm-4 col-form-label">Введите последние четыре символа номера заказа:</label>
-                <div class="col-sm-2">
+                <label for="search" class="col-auto col-form-label">Введите последние четыре символа номера заказа:</label>
+                <div class="col-auto">
                     <input class="form-control" id="search" name="search" maxlength="4" th:value="*{value_search}" placeholder="####">
                 </div>
-                <div class="col-sm-2">
+                <div class="col-auto">
                     <button class="btn btn-outline-primary" type="submit">Найти</button>
                 </div>
             </div>
-
-
-<!--                <div>-->
-<!--                    <label for="search">Введите последние четыре символа номера заказа</label>-->
-<!--                    <input type="text" id="search" name="search" maxlength="4" th:value="*{value_search}">-->
-<!--                    <button class="btn btn-outline-primary" type="submit">Найти</button>-->
-<!--                </div>-->
             </form>
         </td>
     </tr>
@@ -101,11 +92,11 @@
 </table>
 </div>
 <!--PERSON-->
-<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePerson"
-        aria-expanded="false" aria-controls="collapsePerson">
-    Пользователи
-</button>
-<div class="collapse" id="collapsePerson">
+<!--<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePerson"-->
+<!--        aria-expanded="false" aria-controls="collapsePerson">-->
+<!--    Пользователи-->
+<!--</button>-->
+<div class="collapse show" id="collapsePerson">
 <table class="table table-bordered border-primary caption-top">
     <caption>Список пользователей</caption>
     <thead class="table-light border-primary">
@@ -115,19 +106,12 @@
         <th>Действия</th>
     </tr>
     </thead>
-    <tfoot>
-    <tr>
-        <td colspan="3">
-            <!--            <form th:method="GET" th:action="@{/admin/user/search}">-->
-            <!--                <div>-->
-            <!--                    <label for="search">Введите логин пользователя</label>-->
-            <!--                    <input type="text" id="search" name="search" maxlength="4" th:value="*{value_search}">-->
-            <!--                    <button type="submit">Найти</button>>-->
-            <!--                </div>-->
-            <!--            </form>-->
-        </td>
-    </tr>
-    </tfoot>
+<!--    <tfoot>-->
+<!--    <tr>-->
+<!--        <td colspan="3">-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tfoot>-->
     <tbody>
     <tr th:each="person : ${persons}">
         <td th:text="${person.getLogin()}"></td>
